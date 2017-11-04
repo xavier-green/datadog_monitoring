@@ -3,7 +3,8 @@ const axios = require("axios"),
       checkResponseCode = require('./response_codes').checkResponseCode,
       settings = require('./../config/settings'),
       addStat = require('./../db/db_functions').addStat,
-      moment = require("moment");
+      moment = require("moment"),
+      fs = require('fs');
 
 
 // These two helper functions will track response time
@@ -34,8 +35,7 @@ sendRequests = (website_obj) => {
                   status:status_object,
                   timestamp: new Date()
               };
-        addStat(url, stat_object)
-        // console.log(JSON.stringify(stat_object)+" ("+i+") in "+response_time+"ms\n");
+        addStat(url, stat_object);
         return bluebird.delay(interval)
     })
     .then(()=>{
@@ -45,7 +45,6 @@ sendRequests = (website_obj) => {
         // This happens if axios times out (the website could not be reached)
         const stat_object = {
             response_time: null,
-            message: "Timeout error",
             response_status: null,
             timestamp: new Date()
         };
@@ -63,6 +62,24 @@ treatWebsiteQueue = (websites) => {
     for (var i=0; i<websites.length; i++) { // Do this asynchronously
       sendRequests(websites[i]);
     }
+
+}
+
+log = (website_url, stat_object) => {
+
+    const today_date = moment().format("D_M_YYYY");
+    const filename = __dirname+"./../../logs/logs_"+today_date+".txt"
+    let log_str = website_url+";";
+    log_str += (stat_object.response_time || -1).toString()+";"
+    log_str += (stat_object.response_status !== null ? stat_object.response_status : {message:"Timeout error"}).message+";"
+    log_str += (stat_object.response_status || {code:500}).code.toString()+";"
+    log_str += moment().format("D/M/YYYY H:m:s")+"\n"
+    fs.appendFile(filename, log_str, (err) => {
+        if (err) {
+            // File needs created
+            fs.writeFile(filename, log_str)
+        }
+    })
 
 }
 
