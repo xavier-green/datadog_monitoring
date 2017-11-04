@@ -1,0 +1,19 @@
+{
+  "name": "datadog_assignment_xg",
+  "version": "1.0.0",
+  "description": "console program to track website performance and availability",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Xavier Green",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.17.0",
+    "bluebird": "^3.5.1",
+    "cli-table": "^0.3.1",
+    "fs": "0.0.1-security",
+    "lowdb": "^1.0.0",
+    "moment": "^2.19.1"
+  }
+}
