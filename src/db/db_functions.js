@@ -5,15 +5,18 @@ const low = require('lowdb'),
       stat_functions = require('./stat_functions'),
       moment = require("moment");
 
+// Our "Database" is simply a json file, queried with lodash commands
 const default_model = {
     websites: []
 }
 
+// Will help fetch stats
 const time_deltas = {
     "10min": 10*60*1000+1,
     "1h": 60*60*1000+1
 }
 
+// Initialization of the json file, addition of the websites
 init = (default_websites) => {
 
       console.log("Initializing database\n");
@@ -26,12 +29,14 @@ init = (default_websites) => {
 
 }
 
+// Get the urls of all websites
 getWebsiteList = () => {
 
     return db.get('websites').map('url').value();
 
 }
 
+// Get website statistics + down status, apply filter is indicated
 getWebsiteData = (website_url, filter=null) => {
 
     if (!(filter)) {
@@ -55,6 +60,7 @@ getWebsiteData = (website_url, filter=null) => {
 
 }
 
+// Add a new website to the db
 addNewWebsite = (website) => {
 
       const url = website.url,
@@ -69,6 +75,7 @@ addNewWebsite = (website) => {
 
 }
 
+// If website reaches alert level or recovers, update the is_down field
 changeDownValue = (website_url, new_value) => {
 
     db.get('websites')
@@ -78,6 +85,7 @@ changeDownValue = (website_url, new_value) => {
 
 }
 
+// Log the output of the request
 addStat = (website_url, stat_object) => {
     // console.log("writing "+JSON.stringify(stat_object));
     db.get('websites')
@@ -87,6 +95,7 @@ addStat = (website_url, stat_object) => {
       .write();
 }
 
+// This computes the actuals stats (with a helper function) the will get sent to the console
 computeStats = (website_url, t_delta) => {
     return new Promise((resolve, reject) => {
         let time_filter = (stat) => {
