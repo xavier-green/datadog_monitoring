@@ -78,6 +78,7 @@ It stores the website's data (an array of info returned from the request loop) a
 
 ## Improvements
 
+- As the benchmark shows, the fastest request implementation is promisifed https, this is what should be used.
 - A class should be created for a *service*. This should be created per website, and would allow more control over an
 individual case. This would allow custom alerts, warnings, logic, pausing, resuming, editing...
 - A proper event-driven architecture between background workers and the frontend. Sockets could be an idea, fired every
