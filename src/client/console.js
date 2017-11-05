@@ -16,10 +16,12 @@ const computeStats = db_functions.computeStats,
 
 // Holds the website list
 let websites = null;
+// Holds the alert list
 let alerts = [];
 
 setupConsole = () => {
 
+    // If the websites have not been set yet, fetch them from the db
     websites = getWebsiteList();
     console.log(websites.join("\n"));
     for (var p=0; p<websites.length; p++) {
@@ -34,15 +36,13 @@ runConsoleProgram = (i=0) => {
         setupConsole();
     }
 
-    // Will hold the alerts status
+    // Reset alerts
     alerts = [];
 
-    // By default, updates every 10s with 10min data, the every 1min = 6*10s, update with 1h data
-    let time_interval = "10min",
-        time_for_rerun = settings.console_update_interval,
+    // By default, updates every 10s with 10min data, then every 1min = 6*10s, update with 1h data
+    let time_for_rerun = settings.console_update_interval, // Time between console data refresh
         k=i+1;
-    if (i==5) {
-        time_interval = "1h"
+    if (i==5) { // This happens when we are to fetch data for 1h
         k = 0
     }
 

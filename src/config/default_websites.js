@@ -1,3 +1,5 @@
+// This holds the list of default websites that will be added to the db, each with their specific check interval
+
 let websites = [
     {
         url: "https://google.com",
