@@ -13,6 +13,7 @@ console.log("\nTo start running the program, please type 'run'\n\n");
 stdin.addListener("data", function(d) {
     let user_input = d.toString().trim();
     if (user_input === "run") {
+        stdin.removeAllListeners("data")
         dbInit(default_websites);
         console.log("\nEntering the websites in the database");
         treatWebsiteQueue(default_websites);
