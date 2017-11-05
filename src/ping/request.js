@@ -16,6 +16,7 @@ endTime = (start_time) => {
     return elapsed.toFixed(2);
 }
 
+// Send an axios request (which tracks load time instead of response time...)
 sendRequests = (website_obj) => {
 
     const url = website_obj.url,
@@ -36,13 +37,14 @@ sendRequests = (website_obj) => {
                   timestamp: new Date()
               };
         addStat(url, stat_object);
+        // Delay the returned promise by the interval for the website
         return bluebird.delay(interval)
     })
     .then(()=>{
         return sendRequests(website_obj)
     })
     .catch((err) => {
-        // This happens if axios times out (the website could not be reached)
+        // This happens if the website could not be reached
         const stat_object = {
             response_time: null,
             response_status: null,
@@ -65,13 +67,14 @@ treatWebsiteQueue = (websites) => {
 
 }
 
+// Log daily files
 log = (website_url, stat_object) => {
 
     const today_date = moment().format("D_M_YYYY");
     const filename = __dirname+"./../../logs/logs_"+today_date+".txt"
     let log_str = website_url+";";
     log_str += (stat_object.response_time || -1).toString()+";"
-    log_str += (stat_object.response_status !== null ? stat_object.response_status : {message:"Timeout error"}).message+";"
+    log_str += (stat_object.response_status || {message:"Timeout error"}).message+";"
     log_str += (stat_object.response_status || {code:500}).code.toString()+";"
     log_str += moment().format("D/M/YYYY H:m:s")+"\n"
     fs.appendFile(filename, log_str, (err) => {
