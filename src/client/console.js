@@ -5,7 +5,10 @@ const db_functions = require('./../db/db_functions'),
 
 // The table that will be shown to the user (and updated every 10s)
 var table = new Table({
-    head: ['URL', 'Availability', 'Resp. Time', 'Std Resp. Time', 'Max Resp. Time', 'Last Resp. Code', 'Downtime']
+    head: ['URL', 'Availability', 'Resp. Time', 'Std Resp. Time', 'Max Resp. Time', 'Last Resp. Code', 'Downtime'],
+    style: {
+        head: ['yellow']
+    }
 });
 
 const computeStats = db_functions.computeStats,

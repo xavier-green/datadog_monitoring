@@ -63,7 +63,7 @@ computeStats = (website_data, website_url, t_delta) => {
         }
 
 
-        //Alert computing, use sliding window to check for recoverability
+        //Alert computing
         if ((now-stat_time)<time_deltas["2min"]) {
             two_min_total_requests += 1;
             if (stat_response_time && (status_object.message == "Ok")) {
