@@ -19,6 +19,8 @@ stdin.addListener("data", function(d) {
         treatWebsiteQueue(default_websites);
         console.log("\nStarting the program");
         setTimeout(function () {
+
+            // This starts the actual monitoring
             console_run();
         }, 5000);
     } else {

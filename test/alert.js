@@ -1,3 +1,10 @@
+/*
+  This is a test file written for the computeStats method
+  Since we are testing the alert mechanism we will use mock request returns
+  We will loop through multiple scenarios (all okay, alert needed, recovery)
+  and print the success rate, and throw errors - if any
+*/
+
 const computeStats =  require('./../src/db/stat_functions').computeStats;
 
 randomNumb = (min, max) => {
@@ -32,6 +39,7 @@ fakeWebsiteData = (max_iterations=50) => {
         let request_type = (Math.round(randomNumb(0,3)) > 0 ? 1 : 0);
         let requests = request_types[request_type];
         let request_length = requests.length;
+        // Randomly choose one of the request response types
         let request_number = Math.round(randomNumb(0, request_length-1));
         let request = requests[request_number];
         request.timestamp = createTimestamp(10)
@@ -41,6 +49,7 @@ fakeWebsiteData = (max_iterations=50) => {
 }
 
 testAlert = () => {
+    // This is to keep track of test scenarios results
     let test_resuts = {
         alert: 0,
         total_alert: 0,
@@ -50,8 +59,10 @@ testAlert = () => {
         total_all_ok: 0
     }
 
+    // Try 100 random combinations
     for (var i=0; i<100; i++) {
           let data = fakeWebsiteData();
+          // Randomly select whether the website was considered "down" in the past
           let is_down = (Math.round(Math.random())==0 ? false : true);
           let final_data = {
               websiteData: data,
@@ -60,6 +71,8 @@ testAlert = () => {
           const result = computeStats(final_data, "http://test.com", "1h");
           const alert = result.alert,
                 availability = result.availability;
+
+          // This is the part that checks if what was returned was the expected
           if (availability<80) {
               test_resuts['total_alert'] += 1
               if (alert && (alert.text.indexOf("down") !== (-1))) {
@@ -88,6 +101,7 @@ testAlert = () => {
               }
           }
     }
+    // Print the test results
     console.log("\nAll okay: "+test_resuts['all_ok'].toString()+"/"+test_resuts['total_all_ok'].toString()+" passed");
     console.log("Recovery: "+test_resuts['recovery'].toString()+"/"+test_resuts['total_recovery'].toString()+" passed");
     console.log("Alerts: "+test_resuts['alert'].toString()+"/"+test_resuts['total_alert'].toString()+" passed");
