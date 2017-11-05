@@ -18,7 +18,8 @@ This is a beta project, to be used as an experiment. Follow the simple instructi
 What things you need to install the software and how to install them
 
 ```
-NodeJS :)
+- Node JS
+- npm
 ```
 
 ### Installing
@@ -26,7 +27,7 @@ NodeJS :)
 Only a few basic dependencies are needed, run this command to install them (in the root directory)
 
 ```
-npm i
+npm install
 ```
 
 This will install:
@@ -46,63 +47,22 @@ npm start
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+More to come, for now only the alerting logic includes a test file. To test, run:
 
 ```
-Give an example
+npm test
 ```
 
-### And coding style tests
 
-Explain what these tests test and why
+## Improvements
 
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+- event managed between front and back (socket?) to add new web, pause, stop, run..
+- class to manage a 'service' that hold one url
+- test through all methods, by using a sandboxed environment (sandi for ex) and stubs on external methods, chai assert
+- dynamic frontend update (if web, smthg like reactjs - especially if reload time < refresh request time)
+- use ping instead of a request library (it's pulling loading time here, not response time)
 
 
+## Author
 
-To improve:
- - event managed between front and back (socket?) to add new web, pause, stop, run..
- - class to manage a 'service' that hold one url
- - test through all methods, by using a sandboxed environment (sandi for ex) and stubs on external methods, chai assert
- - dynamic frontend update (if web, smthg like reactjs - especially if reload time < refresh request time)
- - use ping instead of a request library (it's pulling loading time here, not response time)
+* **Xavier Green** - *A motivated candidate wanting to join the @Datadog team*
