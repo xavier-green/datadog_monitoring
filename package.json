@@ -15,6 +15,13 @@
     "cli-table": "^0.3.1",
     "fs": "0.0.1-security",
     "lowdb": "^1.0.0",
-    "moment": "^2.19.1"
+    "moment": "^2.19.1",
+    "node-fetch": "^1.7.3"
+  },
+  "devDependencies": {
+    "fetch": "^1.1.0",
+    "got": "^7.1.0",
+    "request": "^2.83.0",
+    "superagent": "^3.8.0"
   }
 }

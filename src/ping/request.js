@@ -26,8 +26,7 @@ sendRequests = (website_obj) => {
     return axios.get(url, settings.request_timeout)
     .then((axios_response) => {
         const response_time = endTime(start_time);
-        const response_data = axios_response.data,
-              response_status = axios_response.status;
+        const response_status = axios_response.status;
 
         // Process the status code and write the data to the db
         const status_object = checkResponseCode(response_status),
