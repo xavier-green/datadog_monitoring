@@ -5,3 +5,4 @@ To improve:
  - class to manage a 'service' that hold one url
  - test through all methods, by using a sandboxed environment (sandi for ex) and stubs on external methods, chai assert
  - dynamic frontend update (if web, smthg like reactjs - especially if reload time < refresh request time)
+ - use ping instead of a request library (it's pulling loading time here, not response time)

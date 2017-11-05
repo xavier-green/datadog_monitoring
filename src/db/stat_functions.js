@@ -9,25 +9,25 @@ const alert_threshold =  require('./../config/settings').alert_threshold;
 
 computeStats = (website_data, website_url, t_delta) => {
 
-    // console.log("Getting stats for "+website_url);
+    // Timeseries data of the website requests + down status
     const website_stats = website_data.websiteData,
           website_is_down = website_data.is_down;
 
-    const time_delta = time_deltas[t_delta],
-          now = moment(new Date());
+    // Current time that will be used to fetch 2min data for alert calculation
+    const now = moment(new Date());
 
     let total_time_ms = 0,
         total_requests = 0,
-        available_requests = 0,
+        available_requests = 0, // will be used for availability calculation
         max_response_time = 0,
         square_response_time = 0 // will be used for std calculation
-        status_codes = {},
-        min_timestamp = null,
+        status_codes = {}, // holds a map of the status codes
+        min_timestamp = null, // these variables will be used to calculate downtime
         max_timestamp = null;
 
-    let last_resp_code = null;
+    let last_resp_code = null; // holding the last code value that we print in the console
 
-    // Alerts with recovery check
+    // Allow the calculation of availability with a 2min window different that the fetching window
     let two_min_total_requests = 0,
         two_min_success_requests = 0;
 
@@ -44,8 +44,8 @@ computeStats = (website_data, website_url, t_delta) => {
         }
         max_timestamp = stat_time
 
-        if (stat_response_time) {
-            if (status_object.message == "Ok") {
+        if (stat_response_time) { // This is true if the request did not timeout
+            if (status_object.message == "Ok") { // This is true for status codes 2xx and 3xx
                 available_requests += 1;
                 total_time_ms += stat_response_time;
                 square_response_time += stat_response_time*stat_response_time;
@@ -75,25 +75,11 @@ computeStats = (website_data, website_url, t_delta) => {
 
     const two_min_availability = two_min_success_requests/two_min_total_requests;
 
-    let alert_status = null, down_status_changed = false;
-
-    if (two_min_availability<alert_threshold) {
-          alert_status = {
-              text: "Website "+website_url+" is down, availability="+Math.round(two_min_availability*10000)/100+"%, time="+moment().format("D/M/YYYY H:m:s"),
-              color: "\x1b[31m"
-          }
-          if (!(website_is_down)) {
-              down_status_changed = true;
-          }
-    } else {
-          if (website_is_down) {
-                alert_status = {
-                    text: "Website "+website_url+" recovered! time="+moment().format("D/M/YYYY H:m:s"),
-                    color: "\x1b[32m"
-                }
-                down_status_changed = true;
-          }
-    }
+    // Pull alert object from the relevant function
+    const alertObject = getAlertObject(website_url, two_min_availability, website_is_down),
+          alert_status = alertObject[0],
+          // This will hold the logic of whether we need to update to website's state
+          down_status_changed = alertObject[1];
 
     const availability = available_requests/total_requests,
           mean_response_time = total_time_ms/available_requests,
@@ -113,6 +99,32 @@ computeStats = (website_data, website_url, t_delta) => {
         downtime: Math.round(down_time.toString())+'s',
         down_status_changed
     }
+
+}
+
+getAlertObject = (website_url, two_min_availability, website_is_down) => {
+
+    let alert_status = null, down_status_changed = false;
+
+    // This block holds the logic for alert/recovery, based on whether the website was already down
+    if (two_min_availability<alert_threshold) {
+          alert_status = {
+              text: "Website "+website_url+" is down, availability="+Math.round(two_min_availability*10000)/100+"%, time="+moment().format("D/M/YYYY H:m:s"),
+              color: "\x1b[31m"
+          }
+          if (!(website_is_down)) {
+              down_status_changed = true;
+          }
+    } else {
+          if (website_is_down) {
+                alert_status = {
+                    text: "Website "+website_url+" recovered! time="+moment().format("D/M/YYYY H:m:s"),
+                    color: "\x1b[32m"
+                }
+                down_status_changed = true;
+          }
+    }
+    return [alert_status,down_status_changed]
 
 }
 
