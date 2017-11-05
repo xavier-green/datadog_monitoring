@@ -58,24 +58,24 @@ npm test
 Instead of using eventEmitters, sockets or a proper queue this program is based on javascript's asynchronous nature.
 There are 3 parts to the project:
 
-1) The website requests
+1) **The website requests**
 The main loop in the 'src/ping/request.js' file keeps running in the background. Its purpose is simple: ping the
 websites and store the output in the database. The promises ensure the logging is done once the request is completed.
 We use a similar function to setTimeout to keep track of timing in the loop (since each website has its own
 refresh interval).
 
-2) The console program
+2) **The console program**
 The program is in charge of calculating the relevant metrics for the websites and log them to the console.
 The console refresh timing is set by the user, and is independent of the website ping timing.
 The statistics are all calculated in parallel, but the console only updated once all the statistics have been
 calculated (note the Promise.all). This of course could be optimized with a tree-like frontend architecture to only
 update the relevant node at a time.
 
-3) The database
+3) **The database**
 For simplicity we used a json file as our database. The queries are made using lodash syntax.
 It stores:
-- the website's data (an array of info returned from the request loop)
-- status (whether at time t the website is down or not - "down" defined by an availability below x% in the past 2min)
+  - the website's data (an array of info returned from the request loop)
+  - status (whether at time t the website is down or not - "down" defined by an availability below x% in the past 2min)
 
 
 ## Improvements
