@@ -89,7 +89,7 @@ and resume work between workers in case of crashes.
   nodeJS package for this) and stub all external methods. Finally chai asset every output.
 - Use ping instead of a request library (it's pulling loading time here, not response time).
 - Parallelize requests from multiple hosts, to get a read on uptime vs. availability.
-- Include interesting metrics, such as a read on outliers and page loading time alerts.
+- Include interesting metrics, such as latency, a read on outliers (median method), page loading time alerts...
 - Create a proper frontend :) Graphs, logs, settings, editing are of course obvious pages.
 
 
